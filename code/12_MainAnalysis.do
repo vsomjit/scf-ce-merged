@@ -1,9 +1,6 @@
 clear all
-***Identify file for output
-local outputLoc = "$output/20_MainAnalysis"
 ****Begin with Merged SCF and CE dataset
-use $cleandata/scf_ce_22
-
+use $cleandata/MainDataset.dta
 
 count
 tab quantile
@@ -12,11 +9,12 @@ tab ageCat
 list in 1/2
 
 ***Check for consistency with summary stats
-***Top decile has approximately known results
-***These numbers overestimate the equity share of the top quintile
+*** Top decile's equity share as reported by FRED:  
+*** https://fred.stlouisfed.org/series/WFRBST01122   
+*** https://fred.stlouisfed.org/series/WFRBSN09149
+
     egen TopQuintileEqShare = sum(eqShare) if quantile == 20 | quantile==19
     egen TopQuintileExpShare = sum(expnShare) if quantile == 20 | quantile==19
-
 
 *Unit of observation is the income quantile-age category
 *There are 20 income quantiles
@@ -40,17 +38,17 @@ gen lambdaTopcoded = lambda
 ***Relationship between lambda and income
 scatter lambda quantile 
 scatter lambdaTopcoded quantile, ytitle("{&lambda}") xtitle("Household income quantile (1=Lowest, 20=Highest)")
-graph save `outputLoc'/lambdaVincomeScatter.gph, replace
-graph export `outputLoc'/lambdaVincomeScatter.png, replace
-graph export `outputLoc'/lambdaVincomeScatter.pdf, replace
+graph save $output/lambdaVincomeScatter.gph, replace
+graph export $output/lambdaVincomeScatter.png, replace
+graph export $output/lambdaVincomeScatter.pdf, replace
 
 ***Relationship between lambda and income, by age
 label define ageCatLabels 1 "Age 20 - 39" 2 "Age 40 - 69" 3 "Age 70 - 89", replace
 label value ageCat ageCatLabels
 twoway (scatter lambdaTopcoded quantile), by(ageCat, ixaxes ixtick noiytitle noixtitle) subtitle(, nobox) by(, note("")) 
-graph save `outputLoc'/lambdaVincomeScatterByAge.gph, replace
-graph export `outputLoc'/lambdaVincomeScatterByAge.png, replace
-graph export `outputLoc'/lambdaVincomeScatterByAge.pdf, replace
+graph save $output/lambdaVincomeScatterByAge.gph, replace
+graph export $output/lambdaVincomeScatterByAge.png, replace
+graph export $output/lambdaVincomeScatterByAge.pdf, replace
 
 
 ***Relationship between lambda of cell and equity share of cell-- 
@@ -59,9 +57,9 @@ graph rename Graph g1
 scatter lambdaTopcoded eqShare if lambdaTopcoded <2,ytitle("{&lambda}")  xtitle("Equity Share of Demographic Cell")
 graph rename Graph g2
 graph combine g1 g2
-graph save `outputLoc'/lambdaVEquityShare.gph, replace
-graph export `outputLoc'/lambdaVEquityShare.png, replace
-graph export `outputLoc'/lambdaVEquityShare.pdf, replace
+graph save $output/lambdaVEquityShare.gph, replace
+graph export $output/lambdaVEquityShare.png, replace
+graph export $output/lambdaVEquityShare.pdf, replace
 
 
 sum eqShare,detail
@@ -121,9 +119,9 @@ twoway (line cumu_lambdaWgtAvg lambda, lwidth(thick)) (line cumu_lambdaWgtEq lam
 graph rename Graph g2, replace
 graph combine g1 g2
 
-graph save `outputLoc'/CDFlambda.gph, replace
-graph export `outputLoc'/CDFlambda.png, replace
-graph export `outputLoc'/CDFlambda.pdf, replace
+graph save $output/CDFlambda.gph, replace
+graph export $output/CDFlambda.png, replace
+graph export $output/CDFlambda.pdf, replace
 
 * Linear Interpolation
 foreach var in cumu_lambdaWgtAvg cumu_lambdaWgtEq {
@@ -148,6 +146,6 @@ twoway (line cumu_lambdaThetaWgtAvg lambdaWithTheta, sort lwidth(thick)) (line c
 summarize lambdaWithTheta [aweight = avgWeight], detail
 summarize lambdaWithTheta [aweight = eqShare], detail
 
-graph save `outputLoc'/CDFlambdaWithTheta.gph, replace
-graph export `outputLoc'/CDFlambdaWithTheta.png, replace
-graph export `outputLoc'/CDFlambdaWithTheta.pdf, replace
+graph save $output/CDFlambdaWithTheta.gph, replace
+graph export $output/CDFlambdaWithTheta.png, replace
+graph export $output/CDFlambdaWithTheta.pdf, replace

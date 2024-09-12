@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/vigneshsomjit/Git/scf-ce-merged/Main.log
   log type:  text
- opened on:  11 Sep 2024, 23:11:37
+ opened on:  12 Sep 2024, 01:01:06
 
 . 
 . * Set the file paths (only need to change main_dir)
@@ -26079,7 +26079,7 @@ end of do-file
 
 .         
 .         // Main Analysis 
-.         do $code/12_MainAnalysisCopy    
+.         do $code/12_MainAnalysis        
 
 . clear all
 
@@ -27904,5 +27904,5 @@ end of do-file
       name:  <unnamed>
        log:  /Users/vigneshsomjit/Git/scf-ce-merged/Main.log
   log type:  text
- closed on:  11 Sep 2024, 23:16:50
+ closed on:  12 Sep 2024, 01:06:23
 ----------------------------------------------------------------------------------------------------------

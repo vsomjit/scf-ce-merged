@@ -52,7 +52,7 @@ global output "`main_dir'/output"
 * Preliminary Analysis 
 
 	// Descriptive statistics 
-*	do $code/09_TestReplicability
+	do $code/09_TestReplicability
 		// NOTE: commented out because this takes a long time
 	
 	// Distributions 
@@ -62,7 +62,7 @@ global output "`main_dir'/output"
 	do $code/11_PreliminaryAnalysis
 	
 	// Main Analysis 
-	do $code/12_MainAnalysisCopy	
+	do $code/12_MainAnalysis	
 
 * Appendix 
 
