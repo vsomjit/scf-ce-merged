@@ -8,27 +8,19 @@ Stata Version: Stata/BE 17
 
 clear all 
 set more off
-version 18
+version 17
 set seed 20240325
 
-log using Main.log, replace
+log using "~/Git/scf-ce-merged/Main.log", replace
 
-* Directories 
-
-	***Set here to use relative paths for code
-	*local main_dir "~/Documents/Git/urop_research"
-	local main_dir "."
+* Set the file paths (only need to change main_dir)
+local main_dir "~/Git/scf-ce-merged"
+global code "`main_dir'/code"
+global rawdata "`main_dir'/data/raw"
+global cleandata "`main_dir'/data/cleaned"
+global output "`main_dir'/output"
 	
-	global code "`main_dir'/code"
-	global output "`main_dir'/output"
-	global rawdata "`main_dir'/data/raw"
-	global cleandata "`main_dir'/data/cleaned"
-	capture mkdir $cleandata
-	capture mkdir $cleandata/scf
-	capture mkdir $cleandata/ce
-	capture mkdir "`main_dir'/output"
-
-* Data Handling 
+* Data handling 
 
 	// Download packages
 	do $code/00_Setup
@@ -57,30 +49,24 @@ log using Main.log, replace
 	// Merge SCF & CE collapsed datasets 
 	do $code/08_MergeScfCe
 
-/* 
-
-* Preliminary Analysis
+* Preliminary Analysis 
 
 	// Descriptive statistics 
-	*Takes a long time-- can comment out
-	do $code/09_TestReplicability
+*	do $code/09_TestReplicability
+		// NOTE: commented out because this takes a long time
 	
-	// Distributions
-	***XXXWill want to identify key graphs and export them
+	// Distributions 
 	do $code/10_Distributions
 	
-	// Preliminary Analysis 
+	// Preliminary Analysis   
 	do $code/11_PreliminaryAnalysis
-
-*/
-
-* Main Analysis
-	capture mkdir $output/20_MainAnalysis
-	do $code/12_MainAnalysis
+	
+	// Main Analysis 
+	do $code/12_MainAnalysisCopy	
 
 * Appendix 
 
 	// Different Ways to Collapse SCF & CE
 	do $code/13_AlternateCollapses
 
-log close 
+log close
